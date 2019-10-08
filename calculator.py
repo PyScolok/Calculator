@@ -54,36 +54,6 @@ def check_events(event):
         btn_back_clicked()
 
 
-def e_format():
-    global val
-    if len(val) < 16:
-        data.set(val)
-    else:
-        val = Decimal(float(val))
-        val = format(val, ".4e")
-        data.set(val)
-
-
-def point_check():
-    global val, C
-    if "." in val:
-        x = val.split(".")
-        if x[1] == "0":
-            val = x[0]
-            e_format()
-        elif 3 < len(x[0]) < 13:
-            C = len(x[0])
-            val = str(round(float(val), (14 - C)))
-            e_format()
-        elif len(x[0]) >= 13:
-            val = x[0]
-            data.set(val)
-        else:
-            e_format()
-    else:
-        e_format()
-
-
 def btn_point_clicked():
     global val
     if len(val) < 15 and "." not in val and val != "":
@@ -185,132 +155,78 @@ def btn9_clicked():
 
 def btn_plus_clicked():
     global val, A, operator, valS
-    if len(val) < 16 and val != "":
-        if operator == "":
-            if "." in val:
-                A = float(val)
-            else:
-                A = int(val)
-            operator = "+"
-            valS = val + "+"
-            val = ""
-            data.set("")
-            dataS.set(valS)
-        else:
-            operator = "+"
-            x = []
-            for i in valS:
-                x.append(i)
-            x.pop()
-            valS = "".join(x)
-            valS += "+"
-            dataS.set(valS)
+    if len(val) < 16:
+        operator_check("+")
     else:
         pass
 
 
 def btn_minus_clicked():
     global val, A, operator, valS
-    if len(val) < 16 and val != "":
-        if operator == "":
-            if "." in val:
-                A = float(val)
-            else:
-                A = int(val)
-            operator = "-"
-            valS = val + "-"
-            val = ""
-            data.set("")
-            dataS.set(valS)
-        else:
-            operator = "-"
-            x = []
-            for i in valS:
-                x.append(i)
-            x.pop()
-            valS = "".join(x)
-            valS += "-"
-            dataS.set(valS)
+    if len(val) < 16:
+        operator_check("-")
     else:
         pass
 
 
 def btn_mult_clicked():
     global val, A, operator, valS
-    if len(val) < 16 and val != "":
-        if operator == "":
-            if "." in val:
-                A = float(val)
-            else:
-                A = int(val)
-            operator = "x"
-            valS = val + "x"
-            val = ""
-            data.set("")
-            dataS.set(valS)
-        else:
-            operator = "x"
-            x = []
-            for i in valS:
-                x.append(i)
-            x.pop()
-            valS = "".join(x)
-            valS += "x"
-            dataS.set(valS)
+    if len(val) < 16:
+        operator_check("x")
     else:
         pass
 
 
 def btn_div_clicked():
     global val, A, operator, valS
-    if len(val) < 16 and val != "":
-        if operator == "":
-            if "." in val:
-                A = float(val)
-            else:
-                A = int(val)
-            operator = "/"
-            valS = val + "/"
-            val = ""
-            data.set("")
-            dataS.set(valS)
-        else:
-            operator = "/"
-            x = []
-            for i in valS:
-                x.append(i)
-            x.pop()
-            valS = "".join(x)
-            valS += "/"
-            dataS.set(valS)
+    if len(val) < 16:
+        operator_check("/")
     else:
         pass
 
 
 def btn_deg_clicked():
     global val, A, operator, valS
-    if len(val) < 16 and val != "":
-        if operator == "":
+    if len(val) < 16:
+        operator_check("^")
+    else:
+        pass
+
+    
+def operator_check(op):
+    global val, A, operator, valS
+    if operator == "" or operator == op:
+        try:
             if "." in val:
                 A = float(val)
             else:
                 A = int(val)
-            operator = "^"
-            valS = val + "^"
-            val = ""
-            data.set("")
-            dataS.set(valS)
-        else:
-            operator = "^"
-            x = []
-            for i in valS:
-                x.append(i)
-            x.pop()
-            valS = "".join(x)
-            valS += "^"
-            dataS.set(valS)
+            operator_set(op)
+        except ValueError:
+            pass
     else:
-        pass
+        operator_change(op)
+
+
+def operator_set(op):
+    global val, valS, operator
+    valS = val + op
+    val = ""
+    data.set(val)
+    dataS.set(valS)
+    operator = op
+
+
+def operator_change(op):
+    global valS, operator
+    x = []
+    for i in valS:
+        x.append(i)
+    x.pop()
+    valS = "".join(x)
+    valS += op
+    dataS.set(valS)
+    operator = op
 
 
 def btn_c_clicked():
@@ -322,7 +238,6 @@ def btn_c_clicked():
     dataS.set(valS)
     val = ""
     data.set(val)
-
 
 
 def btn_ce_clicked():
@@ -378,6 +293,36 @@ def btn_equ_clicked():
         data.set("Err")
     except OverflowError:
         data.set("Err")
+
+
+def point_check():
+    global val, C
+    if "." in val:
+        x = val.split(".")
+        if x[1] == "0":
+            val = x[0]
+            e_format()
+        elif 3 < len(x[0]) < 13:
+            C = len(x[0])
+            val = str(round(float(val), (14 - C)))
+            e_format()
+        elif len(x[0]) >= 13:
+            val = x[0]
+            data.set(val)
+        else:
+            e_format()
+    else:
+        e_format()
+
+
+def e_format():
+    global val
+    if len(val) < 16:
+        data.set(val)
+    else:
+        val = Decimal(float(val))
+        val = format(val, ".4e")
+        data.set(val)
 
 
 # Creation window
