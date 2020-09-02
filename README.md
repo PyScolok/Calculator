@@ -1,2 +1,1 @@
-# Calculator
-MyCalculator
+Sample desktop calculator.
