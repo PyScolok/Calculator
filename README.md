@@ -1,1 +1,1 @@
-Sample desktop calculator.
+Simple desktop calculator.
