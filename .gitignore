@@ -242,6 +242,7 @@ dmypy.json
 .pytype/
 
 ### VisualStudioCode ###
+.vs
 .vs/
 .vscode/*
 !.vscode/settings.json
